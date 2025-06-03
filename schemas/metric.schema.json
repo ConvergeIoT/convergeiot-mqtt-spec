@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MetricPayload",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "value": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["integer", "float", "boolean", "string"]
+    }
+  },
+  "required": ["timestamp", "value", "type"]
+}
+

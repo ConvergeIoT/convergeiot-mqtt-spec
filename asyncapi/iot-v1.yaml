@@ -1,0 +1,152 @@
+asyncapi: '2.6.0'
+info:
+  title: ConvergeIoT MQTT API
+  version: '1.0.0'
+  description: >
+    MQTT communication specification for ConvergeIoT project with
+    ESP32 nodes and Go gateway middleware.
+servers:
+  hiveMQ:
+    url: mqtt.hivemq.com
+    protocol: mqtt
+channels:
+  iot/v1/metrics/{location}/{deviceId}/{sensor}:
+    description: Sensor data from nodes
+    parameters:
+      location:
+        description: Location of the device or 'default'
+        schema:
+          type: string
+      deviceId:
+        description: Unique device identifier
+        schema:
+          type: string
+      sensor:
+        description: Sensor type (e.g. temperature, co, pressure)
+        schema:
+          type: string
+    publish:
+      summary: Publish sensor metrics
+      payload:
+        type: object
+        properties:
+          timestamp:
+            type: string
+            format: date-time
+          value:
+            type: string
+          type:
+            type: string
+            enum: [integer, float, boolean, string]
+        required:
+          - timestamp
+          - value
+          - type
+  iot/v1/commands/{location}/{deviceId}/{commandType}:
+    description: Commands sent to nodes
+    parameters:
+      location:
+        description: Location or special 'any' for broadcast
+        schema:
+          type: string
+      deviceId:
+        description: Target device or 'broadcast'
+        schema:
+          type: string
+      commandType:
+        description: Type of command (e.g. on_off, set_threshold, update_config, firmware_update)
+        schema:
+          type: string
+    publish:
+      summary: Send command to nodes
+      payload:
+        type: object
+        properties:
+          timestamp:
+            type: string
+            format: date-time
+          command:
+            type: string
+          params:
+            type: object
+        required:
+          - timestamp
+          - command
+  iot/v1/logs/{location}/{deviceId}/{logType}:
+    description: Logs from nodes
+    parameters:
+      location:
+        description: Location or 'default'
+        schema:
+          type: string
+      deviceId:
+        description: Device identifier
+        schema:
+          type: string
+      logType:
+        description: Type of log (e.g. config, error)
+        schema:
+          type: string
+    publish:
+      summary: Publish logs
+      payload:
+        type: object
+        properties:
+          timestamp:
+            type: string
+            format: date-time
+          message:
+            type: string
+          level:
+            type: string
+            enum: [info, warning, error]
+        required:
+          - timestamp
+          - message
+          - level
+components:
+  schemas:
+    MetricPayload:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        value:
+          type: string
+        type:
+          type: string
+          enum: [integer, float, boolean, string]
+      required:
+        - timestamp
+        - value
+        - type
+    CommandPayload:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        command:
+          type: string
+        params:
+          type: object
+      required:
+        - timestamp
+        - command
+    LogPayload:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        message:
+          type: string
+        level:
+          type: string
+          enum: [info, warning, error]
+      required:
+        - timestamp
+        - message
+        - level
+

@@ -1,0 +1,9 @@
+{
+  "timestamp": "2025-06-03T12:10:00Z",
+  "command": "firmware_update",
+  "params": {
+    "version": "1.2.3",
+    "url": "https://example.com/firmware.bin"
+  }
+}
+
